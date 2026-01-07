@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "newsletter_subscribers",
+  "info": {
+    "singularName": "newsletter-subscriber",
+    "pluralName": "newsletter-subscribers",
+    "displayName": "Newsletter Subscriber",
+    "description": "Inscritos na newsletter"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "email": {
+      "type": "email",
+      "required": true,
+      "unique": true
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "segment": {
+      "type": "enumeration",
+      "enum": ["importer", "retail", "producer", "other"],
+      "default": "other"
+    },
+    "confirmed": {
+      "type": "boolean",
+      "default": false
+    },
+    "confirmation_token": {
+      "type": "string"
+    },
+    "subscribed_at": {
+      "type": "datetime"
+    },
+    "unsubscribed_at": {
+      "type": "datetime"
+    }
+  }
+}

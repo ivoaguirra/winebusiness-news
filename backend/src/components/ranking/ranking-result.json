@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_ranking_ranking_results",
+  "info": {
+    "displayName": "Ranking Result",
+    "description": "Resultado de um ranking"
+  },
+  "options": {},
+  "attributes": {
+    "position": {
+      "type": "integer",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "company": {
+      "type": "string"
+    },
+    "score": {
+      "type": "decimal"
+    },
+    "notes": {
+      "type": "text"
+    }
+  }
+}

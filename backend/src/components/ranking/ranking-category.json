@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_ranking_ranking_categories",
+  "info": {
+    "displayName": "Ranking Category",
+    "description": "Categoria de um ranking"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "results": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ranking.ranking-result"
+    }
+  }
+}

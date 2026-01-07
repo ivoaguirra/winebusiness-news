@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ad_settings",
+  "info": {
+    "singularName": "ad-setting",
+    "pluralName": "ad-settings",
+    "displayName": "Ad Setting",
+    "description": "Configurações de slots de anúncios"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "placement": {
+      "type": "enumeration",
+      "enum": ["top_banner", "sidebar", "in_article_1", "in_article_2", "footer"],
+      "required": true,
+      "unique": true
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "ad_unit_id": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "sizes_desktop": {
+      "type": "json"
+    },
+    "sizes_mobile": {
+      "type": "json"
+    },
+    "key_values": {
+      "type": "json"
+    },
+    "max_per_page": {
+      "type": "integer",
+      "default": 1
+    },
+    "lazy_load": {
+      "type": "boolean",
+      "default": true
+    },
+    "refresh_enabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "refresh_interval": {
+      "type": "integer",
+      "default": 30
+    }
+  }
+}

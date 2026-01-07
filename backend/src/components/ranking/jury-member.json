@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_ranking_jury_members",
+  "info": {
+    "displayName": "Jury Member",
+    "description": "Membro do júri de um ranking"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "string"
+    },
+    "company": {
+      "type": "string"
+    },
+    "photo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "kind": "collectionType",
+  "collectionName": "rankings",
+  "info": {
+    "singularName": "ranking",
+    "pluralName": "rankings",
+    "displayName": "Ranking",
+    "description": "Rankings e prêmios do setor"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "year": {
+      "type": "integer",
+      "required": true
+    },
+    "edition": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "methodology": {
+      "type": "richtext"
+    },
+    "featured_image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["draft", "review", "scheduled", "published"],
+      "default": "draft"
+    },
+    "author": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "categories": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ranking.ranking-category"
+    },
+    "jury_members": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ranking.jury-member"
+    }
+  }
+}

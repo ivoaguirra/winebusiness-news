@@ -1,0 +1,74 @@
+{
+  "kind": "collectionType",
+  "collectionName": "people",
+  "info": {
+    "singularName": "person",
+    "pluralName": "people",
+    "displayName": "Person",
+    "description": "Movimentações de pessoas no mercado (Gente)"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
+    },
+    "photo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "previous_position": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "previous_company": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "new_position": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "new_company": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "movement_type": {
+      "type": "enumeration",
+      "enum": ["hired", "promoted", "left", "other"],
+      "default": "hired"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["draft", "review", "scheduled", "published"],
+      "default": "draft"
+    },
+    "publish_date": {
+      "type": "datetime"
+    },
+    "author": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::tag.tag"
+    }
+  }
+}
