@@ -7,62 +7,75 @@ import crypto from 'crypto';
 
 export default factories.createCoreController('api::newsletter-subscriber.newsletter-subscriber', ({ strapi }) => ({
   async create(ctx) {
-    const { email, name, segment } = ctx.request.body.data;
+    try {
+      const { email, name, segment } = ctx.request.body.data;
 
-    // Gerar token de confirmação
-    const confirmation_token = crypto.randomBytes(32).toString('hex');
+      // Gerar token de confirmação
+      const confirmation_token = crypto.randomBytes(32).toString('hex');
 
-    // Criar subscriber
-    const subscriber = await strapi.entityService.create('api::newsletter-subscriber.newsletter-subscriber', {
-      data: {
-        email,
-        name,
-        segment: segment || 'other',
-        confirmation_token,
-        subscribed_at: new Date(),
-      } as any,
-    });
+      // Criar subscriber usando entityService sem tipagem rígida
+      const subscriber = await strapi.db.query('api::newsletter-subscriber.newsletter-subscriber').create({
+        data: {
+          email,
+          name,
+          segment: segment || 'other',
+          confirmed: false,
+          confirmation_token,
+          subscribed_at: new Date(),
+        },
+      });
 
-    // Aqui você pode integrar com webhook para enviar email de confirmação
-    // await sendConfirmationEmail(email, confirmation_token);
+      // Aqui você pode integrar com webhook para enviar email de confirmação
+      // await sendConfirmationEmail(email, confirmation_token);
 
-    return { data: { id: subscriber.id, email: subscriber.email } };
+      return { data: { id: subscriber.id, email: subscriber.email } };
+    } catch (error) {
+      ctx.throw(500, error);
+    }
   },
 
   async confirm(ctx) {
-    const { token } = ctx.params;
+    try {
+      const { token } = ctx.params;
 
-    const subscribers = await strapi.entityService.findMany('api::newsletter-subscriber.newsletter-subscriber', {
-      filters: { confirmation_token: token },
-    });
+      const subscriber = await strapi.db.query('api::newsletter-subscriber.newsletter-subscriber').findOne({
+        where: { confirmation_token: token },
+      });
 
-    if (!subscribers || subscribers.length === 0) {
-      return ctx.badRequest('Token inválido');
+      if (!subscriber) {
+        return ctx.badRequest('Token inválido');
+      }
+
+      await strapi.db.query('api::newsletter-subscriber.newsletter-subscriber').update({
+        where: { id: subscriber.id },
+        data: {
+          confirmed: true,
+          confirmation_token: null,
+        },
+      });
+
+      return { data: { message: 'Email confirmado com sucesso!' } };
+    } catch (error) {
+      ctx.throw(500, error);
     }
-
-    const subscriber = subscribers[0];
-
-    await strapi.entityService.update('api::newsletter-subscriber.newsletter-subscriber', subscriber.id, {
-      data: {
-        confirmation_token: null,
-      } as any,
-    });
-
-    return { data: { message: 'Email confirmado com sucesso!' } };
   },
 
   async exportCsv(ctx) {
-    const subscribers = await strapi.entityService.findMany('api::newsletter-subscriber.newsletter-subscriber', {
-      filters: {},
-    });
+    try {
+      const subscribers = await strapi.db.query('api::newsletter-subscriber.newsletter-subscriber').findMany({
+        where: { confirmed: true },
+      });
 
-    const csv = [
-      'email,name,segment,subscribed_at',
-      ...subscribers.map((s: any) => `${s.email},${s.name || ''},${s.segment},${s.subscribed_at}`),
-    ].join('\n');
+      const csv = [
+        'email,name,segment,subscribed_at',
+        ...subscribers.map((s: any) => `${s.email},${s.name || ''},${s.segment},${s.subscribed_at}`),
+      ].join('\n');
 
-    ctx.set('Content-Type', 'text/csv');
-    ctx.set('Content-Disposition', 'attachment; filename="subscribers.csv"');
-    return csv;
+      ctx.set('Content-Type', 'text/csv');
+      ctx.set('Content-Disposition', 'attachment; filename="subscribers.csv"');
+      return csv;
+    } catch (error) {
+      ctx.throw(500, error);
+    }
   },
 }));
