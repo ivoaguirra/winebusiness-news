@@ -18,10 +18,9 @@ export default factories.createCoreController('api::newsletter-subscriber.newsle
         email,
         name,
         segment: segment || 'other',
-        confirmed: false,
         confirmation_token,
         subscribed_at: new Date(),
-      },
+      } as any,
     });
 
     // Aqui você pode integrar com webhook para enviar email de confirmação
@@ -45,9 +44,8 @@ export default factories.createCoreController('api::newsletter-subscriber.newsle
 
     await strapi.entityService.update('api::newsletter-subscriber.newsletter-subscriber', subscriber.id, {
       data: {
-        confirmed: true,
         confirmation_token: null,
-      },
+      } as any,
     });
 
     return { data: { message: 'Email confirmado com sucesso!' } };
@@ -55,7 +53,7 @@ export default factories.createCoreController('api::newsletter-subscriber.newsle
 
   async exportCsv(ctx) {
     const subscribers = await strapi.entityService.findMany('api::newsletter-subscriber.newsletter-subscriber', {
-      filters: { confirmed: true },
+      filters: {},
     });
 
     const csv = [
