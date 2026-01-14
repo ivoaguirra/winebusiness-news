@@ -1,4 +1,4 @@
-module.exports = ({ env }) => ({
+module.exports = ({
   connection: {
     client: 'postgres',
     connection: env('DATABASE_URL'),
