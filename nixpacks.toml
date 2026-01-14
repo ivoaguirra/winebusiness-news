@@ -1,0 +1,16 @@
+[phases.setup]
+nixPkgs = ['nodejs_20', 'yarn']
+
+[phases.install]
+cmds = ['cd backend && yarn install']
+
+[phases.build]
+cmds = ['cd backend && yarn build']
+
+[start]
+cmd = 'cd backend && yarn start'
+
+[variables]
+NODE_ENV = 'production'
+HOST = '0.0.0.0'
+PORT = '3000'
