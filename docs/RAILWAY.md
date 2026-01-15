@@ -89,3 +89,21 @@ Por padrão, o middleware `strapi::cors` está ativo.【F:backend/config/middlew
 - **Assets quebrados no Strapi**: confirme `PUBLIC_URL`.
 - **Erro de SSL no banco**: confirme `DATABASE_SSL=true`.
 
+## ♻️ Reaproveitar banco antigo (mantendo dados)
+
+Quando o banco já foi usado por uma instalação antiga, o schema pode ficar incompatível. A forma mais segura de manter **somente os dados corretos** é:
+
+1. **Criar um banco novo** no Railway.
+2. Apontar o Strapi para o banco novo e fazer **redeploy** (isso cria o schema correto).
+3. **Exportar apenas os dados válidos** do banco antigo (por exemplo, artigos publicados).
+4. **Importar os dados** no banco novo.
+
+Exemplo de exportação filtrada (ajuste a tabela e o filtro):
+
+```sql
+COPY (
+  SELECT * FROM articles WHERE status = 'published'
+) TO STDOUT WITH CSV HEADER;
+```
+
+> ✅ Essa abordagem evita erros de migração como `relation does not exist` em índices antigos.
