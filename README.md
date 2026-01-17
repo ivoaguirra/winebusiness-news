@@ -224,6 +224,10 @@ STRAPI_ADMIN_JWT_SECRET=secret_jwt
    certbot certonly --webroot -w /var/www/certbot -d winebusiness.news
    ```
 
+### Deploy no Railway
+
+Veja o passo a passo em [docs/RAILWAY.md](./docs/RAILWAY.md).
+
 ## 📈 SEO
 
 - **Sitemap dinâmico** em `/sitemap.xml`
