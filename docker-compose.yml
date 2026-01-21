@@ -44,6 +44,7 @@ services:
       ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET:-randomjwtsecret}
       TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT:-randomtransfersalt}
       JWT_SECRET: ${JWT_SECRET:-randomjwtsecret}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:-randomencryptionkey}
       PORT: ${PORT:-1337}
     volumes:
       - strapi_uploads:/app/public/uploads
