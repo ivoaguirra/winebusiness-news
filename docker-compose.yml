@@ -31,7 +31,7 @@ services:
     container_name: winebusiness-strapi
     restart: unless-stopped
     environment:
-      NODE_ENV: production
+      NODE_ENV: ${NODE_ENV:-production}
       DATABASE_CLIENT: postgres
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432
@@ -39,11 +39,12 @@ services:
       DATABASE_USERNAME: ${POSTGRES_USER:-winebusiness}
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
       DATABASE_SSL: ${DATABASE_SSL:-false}
-      APP_KEYS: ${STRAPI_APP_KEYS:-key1,key2,key3,key4}
-      API_TOKEN_SALT: ${STRAPI_API_TOKEN_SALT:-randomsalt}
-      ADMIN_JWT_SECRET: ${STRAPI_ADMIN_JWT_SECRET:-randomjwtsecret}
-      TRANSFER_TOKEN_SALT: ${STRAPI_TRANSFER_TOKEN_SALT:-randomtransfersalt}
-      JWT_SECRET: ${STRAPI_JWT_SECRET:-randomjwtsecret}
+      APP_KEYS: ${APP_KEYS:-key1,key2,key3,key4}
+      API_TOKEN_SALT: ${API_TOKEN_SALT:-randomsalt}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET:-randomjwtsecret}
+      TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT:-randomtransfersalt}
+      JWT_SECRET: ${JWT_SECRET:-randomjwtsecret}
+      PORT: ${PORT:-1337}
     volumes:
       - strapi_uploads:/app/public/uploads
     ports:
@@ -67,7 +68,7 @@ services:
     container_name: winebusiness-frontend
     restart: unless-stopped
     environment:
-      NODE_ENV: production
+      NODE_ENV: ${NODE_ENV:-production}
       STRAPI_API_TOKEN: ${STRAPI_API_TOKEN:-}
       NEWSLETTER_WEBHOOK_URL: ${NEWSLETTER_WEBHOOK_URL:-}
     ports:
