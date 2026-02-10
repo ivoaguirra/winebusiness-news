@@ -18,12 +18,16 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '*.winebusiness.news',
+        hostname: '**.winebusiness.news',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.railway.app',
         pathname: '/**',
       },
     ],
     formats: ['image/avif', 'image/webp'],
-    unoptimized: true,
   },
 
   // Headers for security and caching
@@ -74,14 +78,6 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_STRAPI_URL: process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337',
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://winebusiness.news',
   },
-
-  // Experimental features
-  experimental: {
-    // Enable server actions
-  },
-
-  // Output configuration for Docker
-  output: 'standalone',
 };
 
 export default nextConfig;

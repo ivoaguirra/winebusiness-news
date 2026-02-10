@@ -18,9 +18,8 @@ export async function fetchAPI(
 ) {
   const { token, ...fetchOptions } = options;
 
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...fetchOptions.headers,
   };
 
   if (token) {
