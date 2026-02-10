@@ -6,104 +6,21 @@ import ArticleCard from '@/components/article/ArticleCard';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import AdSlot from '@/components/ads/AdSlot';
 import { formatDate, getImageUrl } from '@/lib/utils';
-import type { Article } from '@/types';
+import { getArticleBySlug, getRelatedArticles } from '@/lib/data';
 
-// Mock article data
-const mockArticle: Article = {
-  id: 1,
-  documentId: '1',
-  title: 'Importações de vinhos crescem 15% no primeiro trimestre de 2026',
-  slug: 'importacoes-vinhos-crescem-15-primeiro-trimestre-2026',
-  excerpt: 'O mercado brasileiro de vinhos importados registrou crescimento expressivo nos primeiros três meses do ano, impulsionado pela demanda do varejo e restaurantes.',
-  content: `
-    <p>O mercado brasileiro de vinhos importados registrou um crescimento de 15% no primeiro trimestre de 2026, segundo dados divulgados pelo Instituto Brasileiro do Vinho (Ibravin). O aumento foi impulsionado principalmente pela demanda do varejo e do setor de restaurantes, que voltaram a apresentar números pré-pandemia.</p>
-
-    <h2>Principais países exportadores</h2>
-    <p>A Argentina manteve sua posição de liderança entre os países exportadores para o Brasil, seguida por Chile, Portugal e Itália. Os vinhos argentinos representaram 35% do volume total importado, com destaque para os Malbecs da região de Mendoza.</p>
-
-    <p>Os vinhos chilenos, por sua vez, ganharam participação de mercado, especialmente na faixa de preço entre R$ 50 e R$ 100, segmento que mais cresceu no período. A proximidade geográfica e os acordos comerciais do Mercosul continuam sendo fatores determinantes para a competitividade dos vinhos sul-americanos.</p>
-
-    <h2>Tendências de consumo</h2>
-    <p>Entre as tendências identificadas, destacam-se:</p>
-    <ul>
-      <li>Crescimento de 25% nas vendas de vinhos orgânicos e biodinâmicos</li>
-      <li>Aumento da demanda por vinhos em lata, especialmente entre consumidores mais jovens</li>
-      <li>Preferência por rótulos com menor teor alcoólico</li>
-      <li>Expansão do e-commerce de vinhos, que já representa 18% das vendas totais</li>
-    </ul>
-
-    <h2>Perspectivas para o ano</h2>
-    <p>Os especialistas do setor projetam que o crescimento deve se manter ao longo de 2026, com expectativa de aumento de 12% a 15% no volume total importado. A estabilização da economia e a melhora no poder de compra da classe média são apontados como fatores positivos para o mercado.</p>
-
-    <blockquote>
-      <p>"O consumidor brasileiro está cada vez mais sofisticado e busca experiências diferenciadas. Isso abre oportunidades para vinhos de regiões menos conhecidas e para produtores que investem em sustentabilidade."</p>
-      <cite>— Maria Silva, diretora comercial da Importadora XYZ</cite>
-    </blockquote>
-
-    <p>O relatório completo com dados detalhados por região e categoria de vinho será publicado pelo Ibravin no próximo mês.</p>
-  `,
-  featured_image: { id: 1, url: '/placeholder.jpg', width: 1200, height: 630 },
-  status: 'published',
-  is_featured: true,
-  is_sponsored: false,
-  reading_time: 5,
-  seo_title: 'Importações de vinhos crescem 15% no primeiro trimestre de 2026',
-  seo_description: 'O mercado brasileiro de vinhos importados registrou crescimento expressivo nos primeiros três meses do ano.',
-  category: { id: 1, documentId: '1', name: 'Notícias', slug: 'noticias', color: '#722f37', order: 1 },
-  tags: [
-    { id: 1, documentId: '1', name: 'Importação', slug: 'importacao', type: 'theme' },
-    { id: 2, documentId: '2', name: 'Mercado', slug: 'mercado', type: 'theme' },
-    { id: 3, documentId: '3', name: 'Brasil', slug: 'brasil', type: 'country' },
-  ],
-  author: { id: 1, username: 'editor', email: 'editor@winebusiness.news' },
-  createdAt: '2026-01-06T10:00:00Z',
-  updatedAt: '2026-01-06T10:00:00Z',
-  publishedAt: '2026-01-06T10:00:00Z',
-};
-
-const relatedArticles: Article[] = [
-  {
-    id: 2,
-    documentId: '2',
-    title: 'Vinícola chilena anuncia expansão no mercado brasileiro',
-    slug: 'vinicola-chilena-anuncia-expansao-mercado-brasileiro',
-    excerpt: 'Concha y Toro planeja dobrar sua presença no Brasil.',
-    featured_image: { id: 2, url: '/placeholder.jpg', width: 1200, height: 630 },
-    status: 'published',
-    is_featured: false,
-    is_sponsored: false,
-    reading_time: 4,
-    category: { id: 1, documentId: '1', name: 'Notícias', slug: 'noticias', color: '#722f37', order: 1 },
-    createdAt: '2026-01-05T14:00:00Z',
-    updatedAt: '2026-01-05T14:00:00Z',
-    publishedAt: '2026-01-05T14:00:00Z',
-  },
-  {
-    id: 3,
-    documentId: '3',
-    title: 'Nova regulamentação de rotulagem entra em vigor em março',
-    slug: 'nova-regulamentacao-rotulagem-entra-vigor-marco',
-    excerpt: 'Anvisa define novas regras para bebidas alcoólicas.',
-    featured_image: { id: 3, url: '/placeholder.jpg', width: 1200, height: 630 },
-    status: 'published',
-    is_featured: false,
-    is_sponsored: false,
-    reading_time: 6,
-    category: { id: 1, documentId: '1', name: 'Notícias', slug: 'noticias', color: '#722f37', order: 1 },
-    createdAt: '2026-01-04T09:00:00Z',
-    updatedAt: '2026-01-04T09:00:00Z',
-    publishedAt: '2026-01-04T09:00:00Z',
-  },
-];
+export const revalidate = 60;
 
 interface PageProps {
   params: Promise<{ category: string; slug: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  // Em produção, buscar artigo do Strapi usando o slug
-  void params; // Usar params em produção para buscar artigo
-  const article = mockArticle;
+  const { slug } = await params;
+  const article = await getArticleBySlug(slug);
+
+  if (!article) {
+    return { title: 'Artigo não encontrado' };
+  }
 
   return {
     title: article.seo_title || article.title,
@@ -132,7 +49,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ArticlePage({ params }: PageProps) {
   const { category, slug } = await params;
-  const article = mockArticle;
+  const article = await getArticleBySlug(slug);
+
+  if (!article) {
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <h1 className="text-2xl font-serif font-bold text-gray-900 mb-4">Artigo não encontrado</h1>
+        <Link href="/" className="text-wine-900 hover:underline">Voltar para a home</Link>
+      </div>
+    );
+  }
+
+  const related = await getRelatedArticles(article.id, article.category?.slug, 2);
 
   // JSON-LD para SEO
   const jsonLd = {
@@ -171,9 +99,7 @@ export default async function ArticlePage({ params }: PageProps) {
         <nav className="mb-6">
           <ol className="flex items-center gap-2 text-sm text-gray-500">
             <li>
-              <Link href="/" className="hover:text-wine-900">
-                Home
-              </Link>
+              <Link href="/" className="hover:text-wine-900">Home</Link>
             </li>
             <li>/</li>
             <li>
@@ -251,7 +177,6 @@ export default async function ArticlePage({ params }: PageProps) {
               dangerouslySetInnerHTML={{ __html: article.content || '' }}
             />
 
-            {/* In-Article Ad */}
             <AdSlot
               placement="in_article_2"
               className="my-8"
@@ -318,22 +243,23 @@ export default async function ArticlePage({ params }: PageProps) {
               </div>
             </div>
 
-            {/* Newsletter CTA */}
             <div className="mt-8">
               <NewsletterForm />
             </div>
 
             {/* Related Articles */}
-            <section className="mt-12">
-              <h2 className="text-2xl font-serif font-bold text-gray-900 mb-6">
-                Artigos Relacionados
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {relatedArticles.map((relatedArticle) => (
-                  <ArticleCard key={relatedArticle.id} article={relatedArticle} />
-                ))}
-              </div>
-            </section>
+            {related.length > 0 && (
+              <section className="mt-12">
+                <h2 className="text-2xl font-serif font-bold text-gray-900 mb-6">
+                  Artigos Relacionados
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {related.map((relatedArticle) => (
+                    <ArticleCard key={relatedArticle.id} article={relatedArticle} />
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
 
           {/* Sidebar */}
@@ -351,7 +277,6 @@ export default async function ArticlePage({ params }: PageProps) {
                 <NewsletterForm variant="compact" />
               </div>
 
-              {/* Back to category */}
               <div className="mt-8">
                 <Link
                   href={`/${category}`}

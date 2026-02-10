@@ -3,9 +3,10 @@ import { notFound } from 'next/navigation';
 import ArticleCard from '@/components/article/ArticleCard';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import AdSlot from '@/components/ads/AdSlot';
-import type { Article } from '@/types';
+import { getArticlesByCategory } from '@/lib/data';
 
-// Categorias válidas
+export const revalidate = 60;
+
 const validCategories: Record<string, { name: string; description: string }> = {
   noticias: {
     name: 'Notícias',
@@ -37,58 +38,6 @@ const validCategories: Record<string, { name: string; description: string }> = {
   },
 };
 
-// Mock data
-const mockArticles: Article[] = [
-  {
-    id: 1,
-    documentId: '1',
-    title: 'Importações de vinhos crescem 15% no primeiro trimestre de 2026',
-    slug: 'importacoes-vinhos-crescem-15-primeiro-trimestre-2026',
-    excerpt: 'O mercado brasileiro de vinhos importados registrou crescimento expressivo nos primeiros três meses do ano.',
-    featured_image: { id: 1, url: '/placeholder.jpg', width: 1200, height: 630 },
-    status: 'published',
-    is_featured: false,
-    is_sponsored: false,
-    reading_time: 5,
-    category: { id: 1, documentId: '1', name: 'Notícias', slug: 'noticias', color: '#722f37', order: 1 },
-    createdAt: '2026-01-06T10:00:00Z',
-    updatedAt: '2026-01-06T10:00:00Z',
-    publishedAt: '2026-01-06T10:00:00Z',
-  },
-  {
-    id: 2,
-    documentId: '2',
-    title: 'Vinícola chilena anuncia expansão no mercado brasileiro',
-    slug: 'vinicola-chilena-anuncia-expansao-mercado-brasileiro',
-    excerpt: 'Concha y Toro planeja dobrar sua presença no Brasil com novos rótulos.',
-    featured_image: { id: 2, url: '/placeholder.jpg', width: 1200, height: 630 },
-    status: 'published',
-    is_featured: false,
-    is_sponsored: false,
-    reading_time: 4,
-    category: { id: 1, documentId: '1', name: 'Notícias', slug: 'noticias', color: '#722f37', order: 1 },
-    createdAt: '2026-01-05T14:00:00Z',
-    updatedAt: '2026-01-05T14:00:00Z',
-    publishedAt: '2026-01-05T14:00:00Z',
-  },
-  {
-    id: 3,
-    documentId: '3',
-    title: 'Nova regulamentação de rotulagem entra em vigor em março',
-    slug: 'nova-regulamentacao-rotulagem-entra-vigor-marco',
-    excerpt: 'Anvisa define novas regras para informações nutricionais em bebidas alcoólicas.',
-    featured_image: { id: 3, url: '/placeholder.jpg', width: 1200, height: 630 },
-    status: 'published',
-    is_featured: false,
-    is_sponsored: false,
-    reading_time: 6,
-    category: { id: 1, documentId: '1', name: 'Notícias', slug: 'noticias', color: '#722f37', order: 1 },
-    createdAt: '2026-01-04T09:00:00Z',
-    updatedAt: '2026-01-04T09:00:00Z',
-    publishedAt: '2026-01-04T09:00:00Z',
-  },
-];
-
 interface PageProps {
   params: Promise<{ category: string }>;
 }
@@ -119,6 +68,9 @@ export default async function CategoryPage({ params }: PageProps) {
     notFound();
   }
 
+  const articlesRes = await getArticlesByCategory(category, 1, 10);
+  const articles = articlesRes.data;
+
   return (
     <>
       <AdSlot placement="top_banner" className="py-4 bg-gray-100" />
@@ -137,7 +89,7 @@ export default async function CategoryPage({ params }: PageProps) {
           {/* Articles */}
           <div className="lg:col-span-2">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {mockArticles.map((article, index) => (
+              {articles.map((article, index) => (
                 <div key={article.id}>
                   <ArticleCard article={article} />
                   {index === 3 && (
@@ -153,25 +105,21 @@ export default async function CategoryPage({ params }: PageProps) {
             </div>
 
             {/* Pagination */}
-            <div className="mt-8 flex justify-center">
-              <nav className="flex items-center gap-2">
-                <button className="px-4 py-2 border border-gray-300 rounded-md text-gray-500 hover:bg-gray-50">
-                  Anterior
-                </button>
-                <button className="px-4 py-2 bg-wine-900 text-white rounded-md">
-                  1
-                </button>
-                <button className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
-                  2
-                </button>
-                <button className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
-                  3
-                </button>
-                <button className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
-                  Próxima
-                </button>
-              </nav>
-            </div>
+            {articlesRes.meta.pagination && articlesRes.meta.pagination.pageCount > 1 && (
+              <div className="mt-8 flex justify-center">
+                <nav className="flex items-center gap-2">
+                  <button className="px-4 py-2 border border-gray-300 rounded-md text-gray-500 hover:bg-gray-50">
+                    Anterior
+                  </button>
+                  <button className="px-4 py-2 bg-wine-900 text-white rounded-md">
+                    1
+                  </button>
+                  <button className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                    Próxima
+                  </button>
+                </nav>
+              </div>
+            )}
           </div>
 
           {/* Sidebar */}
