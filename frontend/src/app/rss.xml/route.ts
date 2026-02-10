@@ -1,36 +1,7 @@
 import { NextResponse } from 'next/server';
+import { getLatestArticlesForRSS } from '@/lib/data';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://winebusiness.news';
-
-// Em produção, buscar do Strapi
-async function getLatestArticles() {
-  return [
-    {
-      title: 'Importações de vinhos crescem 15% no primeiro trimestre de 2026',
-      slug: 'noticias/importacoes-vinhos-crescem-15-primeiro-trimestre-2026',
-      excerpt: 'O mercado brasileiro de vinhos importados registrou crescimento expressivo nos primeiros três meses do ano.',
-      publishedAt: '2026-01-06T10:00:00Z',
-      category: 'Notícias',
-      author: 'Redação',
-    },
-    {
-      title: 'Vinícola chilena anuncia expansão no mercado brasileiro',
-      slug: 'noticias/vinicola-chilena-anuncia-expansao-mercado-brasileiro',
-      excerpt: 'Concha y Toro planeja dobrar sua presença no Brasil com novos rótulos.',
-      publishedAt: '2026-01-05T14:00:00Z',
-      category: 'Produtores',
-      author: 'Redação',
-    },
-    {
-      title: 'Nova regulamentação de rotulagem entra em vigor em março',
-      slug: 'noticias/nova-regulamentacao-rotulagem-entra-vigor-marco',
-      excerpt: 'Anvisa define novas regras para informações nutricionais em bebidas alcoólicas.',
-      publishedAt: '2026-01-04T09:00:00Z',
-      category: 'Dados & Insights',
-      author: 'Redação',
-    },
-  ];
-}
 
 function escapeXml(text: string): string {
   return text
@@ -42,7 +13,7 @@ function escapeXml(text: string): string {
 }
 
 export async function GET() {
-  const articles = await getLatestArticles();
+  const articles = await getLatestArticlesForRSS(20);
 
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">

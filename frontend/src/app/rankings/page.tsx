@@ -5,76 +5,31 @@ import { Trophy, Calendar, ArrowRight } from 'lucide-react';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import AdSlot from '@/components/ads/AdSlot';
 import { getImageUrl } from '@/lib/utils';
-import type { Ranking } from '@/types';
+import { getRankings } from '@/lib/data';
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: 'Rankings & Prêmios',
   description: 'Rankings e premiações do mercado de vinhos no Brasil: melhores importadores, varejistas, vinícolas e profissionais do ano.',
 };
 
-// Mock rankings data
-const mockRankings: Ranking[] = [
-  {
-    id: 1,
-    documentId: '1',
-    title: 'Top 50 Importadores de Vinhos do Brasil',
-    slug: 'top-50-importadores-vinhos-brasil-2025',
-    year: 2025,
-    edition: '5ª Edição',
-    description: 'Ranking anual dos maiores e mais influentes importadores de vinhos do mercado brasileiro.',
-    featured_image: { id: 1, url: '/placeholder.jpg', width: 1200, height: 630 },
-    status: 'published',
-    createdAt: '2025-12-01T00:00:00Z',
-    updatedAt: '2025-12-01T00:00:00Z',
-    publishedAt: '2025-12-01T00:00:00Z',
-  },
-  {
-    id: 2,
-    documentId: '2',
-    title: 'Melhores Vinhos Brasileiros',
-    slug: 'melhores-vinhos-brasileiros-2025',
-    year: 2025,
-    edition: '10ª Edição',
-    description: 'Avaliação dos melhores vinhos nacionais por categoria, com notas de especialistas.',
-    featured_image: { id: 2, url: '/placeholder.jpg', width: 1200, height: 630 },
-    status: 'published',
-    createdAt: '2025-11-15T00:00:00Z',
-    updatedAt: '2025-11-15T00:00:00Z',
-    publishedAt: '2025-11-15T00:00:00Z',
-  },
-  {
-    id: 3,
-    documentId: '3',
-    title: 'Prêmio Sommelier do Ano',
-    slug: 'premio-sommelier-ano-2025',
-    year: 2025,
-    edition: '8ª Edição',
-    description: 'Reconhecimento aos melhores sommeliers do Brasil em diferentes categorias.',
-    featured_image: { id: 3, url: '/placeholder.jpg', width: 1200, height: 630 },
-    status: 'published',
-    createdAt: '2025-10-20T00:00:00Z',
-    updatedAt: '2025-10-20T00:00:00Z',
-    publishedAt: '2025-10-20T00:00:00Z',
-  },
-  {
-    id: 4,
-    documentId: '4',
-    title: 'Top 30 Lojas de Vinhos',
-    slug: 'top-30-lojas-vinhos-2025',
-    year: 2025,
-    edition: '3ª Edição',
-    description: 'As melhores lojas especializadas em vinhos do Brasil, avaliadas por critérios de curadoria, atendimento e experiência.',
-    featured_image: { id: 4, url: '/placeholder.jpg', width: 1200, height: 630 },
-    status: 'published',
-    createdAt: '2025-09-10T00:00:00Z',
-    updatedAt: '2025-09-10T00:00:00Z',
-    publishedAt: '2025-09-10T00:00:00Z',
-  },
-];
+export default async function RankingsPage() {
+  const rankingsRes = await getRankings(1, 20);
+  const allRankings = rankingsRes.data;
 
-export default function RankingsPage() {
-  const latestRanking = mockRankings[0];
-  const otherRankings = mockRankings.slice(1);
+  const latestRanking = allRankings[0];
+  const otherRankings = allRankings.slice(1);
+
+  if (!latestRanking) {
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <Trophy className="w-12 h-12 text-gold-500 mx-auto mb-4" />
+        <h1 className="text-2xl font-serif font-bold text-gray-900 mb-2">Rankings & Prêmios</h1>
+        <p className="text-gray-600">Nenhum ranking publicado ainda. Volte em breve!</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -210,7 +165,7 @@ export default function RankingsPage() {
                 Metodologia
               </h3>
               <p className="text-sm text-gray-600 mb-4">
-                Nossos rankings são elaborados com base em critérios transparentes, 
+                Nossos rankings são elaborados com base em critérios transparentes,
                 avaliados por um júri de especialistas do mercado.
               </p>
               <Link

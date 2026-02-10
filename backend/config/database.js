@@ -1,5 +1,4 @@
-// config/database.js
-module.exports = ({ env }) => {
+export default ({ env }) => {
   const databaseUrl = env("DATABASE_URL");
 
   if (databaseUrl) {
@@ -15,7 +14,6 @@ module.exports = ({ env }) => {
     };
   }
 
-  // fallback (caso você use vars separadas)
   return {
     connection: {
       client: "postgres",
@@ -31,4 +29,3 @@ module.exports = ({ env }) => {
     },
   };
 };
-

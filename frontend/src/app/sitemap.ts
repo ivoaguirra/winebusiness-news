@@ -1,34 +1,14 @@
 import { MetadataRoute } from 'next';
+import { getAllArticleSlugs, getAllEventSlugs, getAllRankingSlugs } from '@/lib/data';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://winebusiness.news';
 
-// Em produção, buscar artigos do Strapi
-async function getArticles() {
-  // TODO: Implementar fetch do Strapi
-  return [
-    { slug: 'noticias/importacoes-vinhos-crescem-15-primeiro-trimestre-2026', updatedAt: '2026-01-06' },
-    { slug: 'noticias/vinicola-chilena-anuncia-expansao-mercado-brasileiro', updatedAt: '2026-01-05' },
-  ];
-}
-
-async function getEvents() {
-  return [
-    { slug: 'eventos/prowein-2026', updatedAt: '2026-01-01' },
-    { slug: 'eventos/expovinis-brasil-2026', updatedAt: '2026-01-01' },
-  ];
-}
-
-async function getRankings() {
-  return [
-    { slug: 'rankings/top-50-importadores-vinhos-brasil-2025', updatedAt: '2025-12-01' },
-    { slug: 'rankings/melhores-vinhos-brasileiros-2025', updatedAt: '2025-11-15' },
-  ];
-}
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const articles = await getArticles();
-  const events = await getEvents();
-  const rankings = await getRankings();
+  const [articles, events, rankings] = await Promise.all([
+    getAllArticleSlugs(),
+    getAllEventSlugs(),
+    getAllRankingSlugs(),
+  ]);
 
   // Static pages
   const staticPages = [

@@ -2,100 +2,21 @@ import { Metadata } from 'next';
 import EventCard from '@/components/event/EventCard';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import AdSlot from '@/components/ads/AdSlot';
-import type { Event } from '@/types';
+import { getEvents } from '@/lib/data';
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: 'Eventos',
   description: 'Agenda de eventos do mercado de vinhos: feiras, degustações, congressos e encontros do trade.',
 };
 
-// Mock events data
-const mockEvents: Event[] = [
-  {
-    id: 1,
-    documentId: '1',
-    title: 'ProWein 2026',
-    slug: 'prowein-2026',
-    description: 'A maior feira de vinhos do mundo reúne produtores, importadores e profissionais de mais de 60 países.',
-    featured_image: { id: 1, url: '/placeholder.jpg', width: 1200, height: 630 },
-    start_date: '2026-03-15T09:00:00Z',
-    end_date: '2026-03-17T18:00:00Z',
-    location: 'Messe Düsseldorf',
-    city: 'Düsseldorf',
-    country: 'Alemanha',
-    format: 'presential',
-    target_audience: 'Profissionais do trade',
-    event_type: 'Feira',
-    external_link: 'https://www.prowein.com',
-    is_featured: true,
-    status: 'published',
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-01-01T00:00:00Z',
-  },
-  {
-    id: 2,
-    documentId: '2',
-    title: 'Expovinis Brasil 2026',
-    slug: 'expovinis-brasil-2026',
-    description: 'Principal feira de vinhos da América Latina, reunindo importadores, produtores e varejistas.',
-    featured_image: { id: 2, url: '/placeholder.jpg', width: 1200, height: 630 },
-    start_date: '2026-04-08T10:00:00Z',
-    end_date: '2026-04-10T20:00:00Z',
-    location: 'Expo Center Norte',
-    city: 'São Paulo',
-    country: 'Brasil',
-    format: 'presential',
-    target_audience: 'Profissionais e consumidores',
-    event_type: 'Feira',
-    external_link: 'https://www.expovinis.com.br',
-    is_featured: true,
-    status: 'published',
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-01-01T00:00:00Z',
-  },
-  {
-    id: 3,
-    documentId: '3',
-    title: 'Wine South America 2026',
-    slug: 'wine-south-america-2026',
-    description: 'Encontro dos produtores sul-americanos com foco em vinhos de altitude e sustentabilidade.',
-    featured_image: { id: 3, url: '/placeholder.jpg', width: 1200, height: 630 },
-    start_date: '2026-05-20T09:00:00Z',
-    end_date: '2026-05-22T18:00:00Z',
-    location: 'Centro de Eventos',
-    city: 'Bento Gonçalves',
-    country: 'Brasil',
-    format: 'presential',
-    target_audience: 'Produtores e importadores',
-    event_type: 'Congresso',
-    is_featured: false,
-    status: 'published',
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-01-01T00:00:00Z',
-  },
-  {
-    id: 4,
-    documentId: '4',
-    title: 'Webinar: Tendências do Mercado de Vinhos 2026',
-    slug: 'webinar-tendencias-mercado-vinhos-2026',
-    description: 'Especialistas discutem as principais tendências de consumo e oportunidades de negócio.',
-    start_date: '2026-02-15T14:00:00Z',
-    end_date: '2026-02-15T16:00:00Z',
-    city: 'Online',
-    country: 'Brasil',
-    format: 'online',
-    target_audience: 'Profissionais do trade',
-    event_type: 'Webinar',
-    is_featured: false,
-    status: 'published',
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-01-01T00:00:00Z',
-  },
-];
+export default async function EventsPage() {
+  const eventsRes = await getEvents(1, 20);
+  const allEvents = eventsRes.data;
 
-export default function EventsPage() {
-  const featuredEvents = mockEvents.filter((e) => e.is_featured);
-  const upcomingEvents = mockEvents.filter((e) => !e.is_featured);
+  const featuredEvents = allEvents.filter((e) => e.is_featured);
+  const upcomingEvents = allEvents.filter((e) => !e.is_featured);
 
   return (
     <>
@@ -173,34 +94,18 @@ export default function EventsPage() {
             />
 
             {/* Upcoming Events */}
-            <section>
-              <h2 className="text-xl font-serif font-bold text-gray-900 mb-6">
-                Próximos Eventos
-              </h2>
-              <div className="space-y-4">
-                {upcomingEvents.map((event) => (
-                  <EventCard key={event.id} event={event} variant="list" />
-                ))}
-              </div>
-            </section>
-
-            {/* Pagination */}
-            <div className="mt-8 flex justify-center">
-              <nav className="flex items-center gap-2">
-                <button className="px-4 py-2 border border-gray-300 rounded-md text-gray-500 hover:bg-gray-50">
-                  Anterior
-                </button>
-                <button className="px-4 py-2 bg-wine-900 text-white rounded-md">
-                  1
-                </button>
-                <button className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
-                  2
-                </button>
-                <button className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
-                  Próxima
-                </button>
-              </nav>
-            </div>
+            {upcomingEvents.length > 0 && (
+              <section>
+                <h2 className="text-xl font-serif font-bold text-gray-900 mb-6">
+                  Próximos Eventos
+                </h2>
+                <div className="space-y-4">
+                  {upcomingEvents.map((event) => (
+                    <EventCard key={event.id} event={event} variant="list" />
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
 
           {/* Sidebar */}

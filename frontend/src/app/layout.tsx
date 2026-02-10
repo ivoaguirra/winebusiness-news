@@ -1,23 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CookieConsent from "@/components/ui/CookieConsent";
 import Script from "next/script";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const merriweather = Merriweather({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-merriweather",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: {
@@ -98,8 +84,15 @@ export default function RootLayout({
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${merriweather.variable}`}>
+    <html lang="pt-BR">
       <head>
+        {/* Google Fonts - loaded at runtime */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
         {/* Google Tag Manager - Consent Mode Default */}
         <Script id="gtm-consent-default" strategy="beforeInteractive">
           {`
@@ -144,7 +137,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`${inter.className} antialiased bg-gray-50`}>
+      <body className="font-sans antialiased bg-gray-50">
         <div className="min-h-screen flex flex-col">
           <Header />
           <main className="flex-1">{children}</main>

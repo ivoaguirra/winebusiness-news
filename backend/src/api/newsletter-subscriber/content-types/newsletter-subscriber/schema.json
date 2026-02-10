@@ -31,7 +31,8 @@
       "default": false
     },
     "confirmation_token": {
-      "type": "string"
+      "type": "string",
+      "private": true
     },
     "subscribed_at": {
       "type": "datetime"
