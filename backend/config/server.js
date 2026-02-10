@@ -1,5 +1,4 @@
-// config/server.js
-module.exports = ({ env }) => ({
+export default ({ env }) => ({
   host: env("HOST", "0.0.0.0"),
   port: env.int("PORT", 1337),
   url: env("PUBLIC_URL", ""),
@@ -7,5 +6,3 @@ module.exports = ({ env }) => ({
     keys: env.array("APP_KEYS"),
   },
 });
-
-
