@@ -2,15 +2,14 @@
 nixPkgs = ['nodejs_20', 'yarn']
 
 [phases.install]
-cmds = ['yarn install']
+cmds = ['NODE_ENV=development yarn install']
 
 [phases.build]
-cmds = ['yarn build']
+cmds = ['NODE_ENV=production yarn build']
 
 [start]
-cmd = 'yarn start'
+cmd = 'NODE_ENV=production yarn start'
 
 [variables]
-NODE_ENV = 'production'
 HOST = '0.0.0.0'
 PORT = '1337'
