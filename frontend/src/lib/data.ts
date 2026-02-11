@@ -217,6 +217,16 @@ export async function getUpcomingEvents(limit = 3): Promise<Event[]> {
   return mockEvents.slice(0, limit);
 }
 
+export async function getEventBySlug(slug: string): Promise<Event | null> {
+  const res = await strapiGet<StrapiResponse<Event[]>>('/events', {
+    populate: ['featured_image', 'tags', 'author'],
+    filters: { slug: { $eq: slug } },
+  });
+
+  if (res?.data?.[0]) return res.data[0];
+  return mockEvents.find((e) => e.slug === slug) ?? null;
+}
+
 // ---------------------------------------------------------------------------
 // Rankings
 // ---------------------------------------------------------------------------

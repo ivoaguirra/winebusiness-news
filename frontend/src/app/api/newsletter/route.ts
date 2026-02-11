@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { email, name, segments } = body;
+    const { email, name, segment } = body;
 
     // Validação
     if (!email || !isValidEmail(email)) {
@@ -69,10 +69,7 @@ export async function POST(request: NextRequest) {
           data: {
             email,
             name: name || null,
-            segments: segments || [],
-            status: 'pending',
-            confirmation_token: confirmationToken,
-            subscribed_at: new Date().toISOString(),
+            segment: segment || 'other',
           },
         }),
       });
@@ -106,7 +103,7 @@ export async function POST(request: NextRequest) {
             type: 'newsletter_subscription',
             email,
             name,
-            segments,
+            segment,
             confirmationToken,
             confirmationUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/newsletter/confirmar?token=${confirmationToken}`,
           }),
@@ -179,8 +176,7 @@ export async function GET(request: NextRequest) {
       },
       body: JSON.stringify({
         data: {
-          status: 'confirmed',
-          confirmed_at: new Date().toISOString(),
+          confirmed: true,
           confirmation_token: null,
         },
       }),
