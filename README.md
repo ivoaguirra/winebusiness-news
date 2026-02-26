@@ -225,7 +225,31 @@ Sistema de newsletter com:
 
 ## 🐳 Deploy em Produção
 
-### Com Docker Compose
+### Opção 1: Railway (Backend Strapi) ⭐ Recomendado
+
+O Railway oferece deploy fácil e gratuito (até $5/mês) do backend Strapi:
+
+**🚀 Deploy em 5 minutos:**
+1. Acesse [railway.app](https://railway.app) e crie uma conta
+2. New Project → Deploy from GitHub
+3. Escolha o repositório e configure Root Directory: `backend`
+4. Adicione PostgreSQL ao projeto (+ New → Database → PostgreSQL)
+5. Configure as variáveis de ambiente (use `.env.railway` como referência)
+6. Deploy automático! 🎉
+
+**📚 Guias completos:**
+- **Detalhado:** [RAILWAY_DEPLOYMENT.md](./RAILWAY_DEPLOYMENT.md)
+- **Rápido:** [RAILWAY_QUICK.md](./RAILWAY_QUICK.md)
+
+**✨ Recursos do Railway:**
+- ✅ Deploy automático a cada push
+- ✅ PostgreSQL incluído gratuitamente
+- ✅ SSL/HTTPS automático
+- ✅ Logs em tempo real
+- ✅ $5 de crédito gratuito por mês
+- ✅ Rollback fácil para versões anteriores
+
+### Opção 2: Docker Compose
 
 ```bash
 # Build das imagens

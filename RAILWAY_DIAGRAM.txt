@@ -1,0 +1,170 @@
+```
+╔══════════════════════════════════════════════════════════════════╗
+║                                                                  ║
+║           🚂 DEPLOY DO BACKEND NO RAILWAY                       ║
+║                                                                  ║
+║              WineBusiness.news - Strapi + PostgreSQL            ║
+║                                                                  ║
+╚══════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────┐
+│  PASSO 1: Criar Projeto                                         │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  1. Acesse: https://railway.app                                │
+│  2. Login com GitHub                                           │
+│  3. New Project → Deploy from GitHub repo                      │
+│  4. Escolha: ivoaguirra/winebusiness-news                      │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  PASSO 2: Configurar Backend                                    │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  Settings → Service Settings                                    │
+│  └─ Root Directory: backend                                     │
+│                                                                 │
+│  Railway detecta automaticamente:                              │
+│  ✓ nixpacks.toml                                               │
+│  ✓ Node.js 20                                                  │
+│  ✓ npm                                                          │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  PASSO 3: Adicionar PostgreSQL                                  │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  No projeto:                                                    │
+│  1. Clique em "+ New"                                          │
+│  2. Database → PostgreSQL                                       │
+│  3. Railway cria automaticamente:                              │
+│     ✓ DATABASE_URL                                             │
+│     ✓ DATABASE_PRIVATE_URL                                     │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  PASSO 4: Variáveis de Ambiente                                │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  Variables → Raw Editor                                         │
+│                                                                 │
+│  Copie de: backend/.env.railway                                │
+│                                                                 │
+│  OBRIGATÓRIAS:                                                 │
+│  ✓ NODE_ENV=production                                         │
+│  ✓ HOST=0.0.0.0                                                │
+│  ✓ DATABASE_SSL=true                                           │
+│  ✓ APP_KEYS=chave1,chave2,chave3,chave4                       │
+│  ✓ API_TOKEN_SALT=valor_unico                                 │
+│  ✓ ADMIN_JWT_SECRET=valor_unico                               │
+│  ✓ TRANSFER_TOKEN_SALT=valor_unico                            │
+│  ✓ JWT_SECRET=valor_unico                                     │
+│  ✓ ENCRYPTION_KEY=valor_unico                                 │
+│                                                                 │
+│  GERAR CHAVES:                                                 │
+│  $ openssl rand -base64 32                                      │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  PASSO 5: Deploy Automático                                     │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  Railway faz deploy automaticamente!                           │
+│                                                                 │
+│  Processo:                                                      │
+│  1. 📦 Install dependencies (npm ci)                           │
+│  2. 🔨 Build (npm run build)                                   │
+│  3. 🚀 Start (npm start)                                       │
+│  4. ✅ Health check                                            │
+│                                                                 │
+│  Acompanhe:                                                    │
+│  └─ Deployments → View Logs                                    │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  PASSO 6: Gerar Domínio                                        │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  Settings → Networking                                          │
+│  └─ Generate Domain                                             │
+│                                                                 │
+│  Railway fornece:                                              │
+│  https://seu-app.up.railway.app                                │
+│                                                                 │
+│  Ou configure domínio customizado:                             │
+│  └─ Add Custom Domain                                           │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  PASSO 7: Acessar Strapi                                       │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  🌐 Admin Panel:                                               │
+│     https://seu-app.up.railway.app/admin                       │
+│                                                                 │
+│  🔌 API:                                                        │
+│     https://seu-app.up.railway.app/api                         │
+│                                                                 │
+│  Primeira vez:                                                  │
+│  1. Crie conta de administrador                                │
+│  2. Configure Content Types                                    │
+│  3. Gere API Token (Settings → API Tokens)                    │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  CONECTAR FRONTEND                                              │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  No Vercel/Netlify (onde hospedar frontend):                  │
+│                                                                 │
+│  NEXT_PUBLIC_STRAPI_URL=https://seu-app.up.railway.app        │
+│  STRAPI_API_TOKEN=token_gerado_no_strapi                      │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+╔══════════════════════════════════════════════════════════════════╗
+║                                                                  ║
+║  ✅ BACKEND NO RAILWAY - PRONTO!                                ║
+║                                                                  ║
+║  📚 Documentação completa: RAILWAY_DEPLOYMENT.md                ║
+║  ⚡ Guia rápido: RAILWAY_QUICK.md                               ║
+║                                                                  ║
+║  🍷 WineBusiness.news                                           ║
+║                                                                  ║
+╚══════════════════════════════════════════════════════════════════╝
+
+CUSTOS:
+──────
+┌─────────────────┬──────────────────────────────────────────┐
+│ Plano           │ Detalhes                                 │
+├─────────────────┼──────────────────────────────────────────┤
+│ Hobby (Free)    │ $5/mês de crédito gratuito              │
+│                 │ Sleep após 30min inatividade             │
+│                 │ Suficiente para desenvolvimento          │
+├─────────────────┼──────────────────────────────────────────┤
+│ Pro ($20/mês)   │ $20 de crédito incluído                 │
+│                 │ Sem sleep                                │
+│                 │ Melhor para produção                    │
+└─────────────────┴──────────────────────────────────────────┘
+
+SUPORTE:
+────────
+• Logs: Railway Dashboard → Deployments
+• Docs: https://docs.railway.app
+• Discord: https://discord.gg/railway
+• Issues: GitHub Repository
+
+TROUBLESHOOTING:
+───────────────
+Build falha?        → Root Directory = backend
+Database error?     → DATABASE_SSL=true
+Port error?         → Não defina PORT manualmente
+App não inicia?     → Verifique variáveis de ambiente
+```
