@@ -71,38 +71,73 @@ winebusiness-news/
 
 - Docker e Docker Compose
 - Node.js 20+ (para desenvolvimento local)
-- pnpm (frontend) / yarn (backend)
+- pnpm (frontend) / npm (backend)
 
-### Desenvolvimento Local
+### Setup Rápido com Docker (Recomendado)
 
-1. **Clone o repositório**
-   ```bash
-   git clone https://github.com/seu-usuario/winebusiness-news.git
-   cd winebusiness-news
-   ```
+#### Linux/Mac:
+```bash
+# Clone o repositório
+git clone https://github.com/ivoaguirra/winebusiness-news.git
+cd winebusiness-news
 
-2. **Configure as variáveis de ambiente**
+# Execute o script de setup
+./setup.sh
+```
+
+#### Windows:
+```cmd
+# Clone o repositório
+git clone https://github.com/ivoaguirra/winebusiness-news.git
+cd winebusiness-news
+
+# Execute o script de setup
+setup.bat
+```
+
+#### Ou manualmente:
+
+1. **Configure as variáveis de ambiente**
    ```bash
    cp .env.example .env
    # Edite o arquivo .env com suas configurações
    ```
 
+2. **Gere chaves de segurança**
+   ```bash
+   # Linux/Mac
+   openssl rand -base64 32
+   
+   # Windows PowerShell
+   [Convert]::ToBase64String([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+   ```
+
 3. **Inicie com Docker Compose**
    ```bash
-   docker-compose up -d
+   docker-compose up -d --build
    ```
 
 4. **Acesse os serviços**
    - Frontend: http://localhost:3000
    - Strapi Admin: http://localhost:1337/admin
+   - Strapi API: http://localhost:1337/api
+
+5. **Configure o Strapi** (primeira vez)
+   - Acesse http://localhost:1337/admin
+   - Crie sua conta de administrador
+   - Gere um API Token em Settings → API Tokens
+   - Adicione o token ao `.env` como `STRAPI_API_TOKEN`
+   - Reinicie o frontend: `docker-compose restart frontend`
+
+📚 **Para instruções completas de deployment, veja [DEPLOYMENT.md](./DEPLOYMENT.md)**
 
 ### Desenvolvimento sem Docker
 
 **Backend (Strapi):**
 ```bash
 cd backend
-yarn install
-yarn develop
+npm install
+npm run develop
 ```
 
 **Frontend (Next.js):**
