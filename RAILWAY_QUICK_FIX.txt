@@ -1,0 +1,170 @@
+```
+╔══════════════════════════════════════════════════════════════════╗
+║                                                                  ║
+║     ❌ RAILWAY NÃO FUNCIONA? - CORREÇÕES RÁPIDAS ❌            ║
+║                                                                  ║
+║              https://sua-url.up.railway.app/admin               ║
+║                                                                  ║
+╚══════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔍 DIAGNÓSTICO EM 30 SEGUNDOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. ACESSE: https://railway.app
+2. CLIQUE NO SEU PROJETO
+3. CLIQUE NO SERVIÇO (backend)
+4. VÁ NA ABA: Deployments
+
+O QUE VOCÊ VÊ?
+
+┌─────────────────────────────────────────────────────────────────┐
+│ A) "Building..." ou "Deploying..."                             │
+│    → SOLUÇÃO: AGUARDE! Primeira vez leva 5-10 minutos          │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│ B) "Failed" ou "Crashed"                                        │
+│    → SOLUÇÃO: Veja logs → Seção ERROS COMUNS abaixo           │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│ C) "Active" mas URL não funciona                                │
+│    → SOLUÇÃO: Gere domínio (Settings → Networking)            │
+└─────────────────────────────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚨 TOP 5 ERROS E CORREÇÕES IMEDIATAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ERRO #1: "Could not resolve host"                            ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃ CAUSA: Domínio não foi gerado                                ┃
+┃                                                               ┃
+┃ CORREÇÃO:                                                     ┃
+┃ 1. Settings → Networking                                     ┃
+┃ 2. Generate Domain                                           ┃
+┃ 3. Aguarde 2 minutos                                         ┃
+┃ 4. Use a nova URL                                            ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ERRO #2: "App keys are required"                             ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃ CAUSA: Variáveis de ambiente faltando                        ┃
+┃                                                               ┃
+┃ CORREÇÃO:                                                     ┃
+┃ 1. Variables → Raw Editor                                    ┃
+┃ 2. Copie de: backend/.env.railway                           ┃
+┃ 3. Gere chaves: openssl rand -base64 32                     ┃
+┃ 4. Redeploy                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ERRO #3: "Database connection failed"                        ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃ CAUSA: PostgreSQL não configurado                            ┃
+┃                                                               ┃
+┃ CORREÇÃO:                                                     ┃
+┃ 1. + New → Database → PostgreSQL                            ┃
+┃ 2. Aguarde criar (2 min)                                     ┃
+┃ 3. Variables → Adicione: DATABASE_SSL=true                  ┃
+┃ 4. Redeploy                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ERRO #4: "package.json not found"                            ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃ CAUSA: Root Directory incorreto                              ┃
+┃                                                               ┃
+┃ CORREÇÃO:                                                     ┃
+┃ 1. Settings → Service Settings                              ┃
+┃ 2. Root Directory: backend                                   ┃
+┃ 3. Save                                                      ┃
+┃ 4. Redeploy                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ERRO #5: "Port already in use"                               ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃ CAUSA: Variável PORT definida manualmente                    ┃
+┃                                                               ┃
+┃ CORREÇÃO:                                                     ┃
+┃ 1. Variables → Remova: PORT                                 ┃
+┃ 2. Railway fornece automaticamente                          ┃
+┃ 3. Redeploy                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ CHECKLIST OBRIGATÓRIO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CONFIGURAÇÃO:
+  [ ] Root Directory = backend
+  [ ] PostgreSQL adicionado
+  [ ] Domínio gerado
+
+VARIÁVEIS (copie de .env.railway):
+  [ ] NODE_ENV=production
+  [ ] HOST=0.0.0.0
+  [ ] DATABASE_SSL=true
+  [ ] APP_KEYS=chave1,chave2,chave3,chave4
+  [ ] API_TOKEN_SALT=valor_unico
+  [ ] ADMIN_JWT_SECRET=valor_unico
+  [ ] TRANSFER_TOKEN_SALT=valor_unico
+  [ ] JWT_SECRET=valor_unico
+  [ ] ENCRYPTION_KEY=valor_unico
+
+DEPLOY:
+  [ ] Build completou (sem erros)
+  [ ] App iniciou (logs: "Server started")
+  [ ] URL acessível no navegador
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔧 TESTE RÁPIDO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Execute o script de diagnóstico:
+
+    ./railway-diagnostic.sh https://sua-url.up.railway.app
+
+Ou teste manualmente:
+
+    # 1. Teste DNS
+    nslookup sua-url.up.railway.app
+
+    # 2. Teste HTTP
+    curl -I https://sua-url.up.railway.app
+
+    # 3. Teste Admin
+    curl -I https://sua-url.up.railway.app/admin
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🆘 PRECISA DE AJUDA?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. LEIA: RAILWAY_TROUBLESHOOTING.md (guia completo)
+2. VEJA: Logs no Railway → Deployments
+3. TESTE: ./railway-diagnostic.sh sua-url
+4. RESETE: Settings → Clear Cache → Redeploy
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📞 SUPORTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• Railway Docs:    https://docs.railway.app
+• Railway Discord: https://discord.gg/railway
+• Strapi Docs:     https://docs.strapi.io
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+╔══════════════════════════════════════════════════════════════════╗
+║                                                                  ║
+║  💡 DICA: 90% dos problemas são variáveis faltando ou          ║
+║      PostgreSQL não configurado. Verifique primeiro!           ║
+║                                                                  ║
+║  🍷 WineBusiness.news                                           ║
+║                                                                  ║
+╚══════════════════════════════════════════════════════════════════╝
+```
